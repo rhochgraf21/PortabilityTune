@@ -1,0 +1,100 @@
+
+
+SETCOVER:
+	INPUT:
+		U, a set of n elements
+		S, a set of subsets of U
+	OUTPUT:
+		K, a minimal collection S that maximizes U
+
+
+PORTABILITYCOVER:
+	Let C = {k0, k1, k2} for all kernels k
+	Let performance(a, b) be a function such that performance(a, b) is the performance of kernel a on platform b
+	Let X = the threshold performance percentage | X in [0, 1]
+	Let U = {p_0, p_1, ... p_k} for all platforms p
+	Let S = {
+				{p_i, ...} where performance(k, p_i) > X
+				, ...
+			} for all kernels k
+
+	Y = SETCOVER(U, S)
+	K = {k for k in kernels if {performance(k, p) > X} in Y for all platforms p} # THIS STEP CAN BE ADDRESSED OTHERWISE IN POLYNOMIAL TIME
+	K contains an optimal set of kernels
+
+
+
+
+
+
+
+
+
+let D be the set of all devices, and d ∈ D.
+let I be the set of all inputs, and i ∈ I.
+
+let kernel_space be the set of all possible kernels
+let uncovered_space be D x I, the set of all possible devices and inputs
+
+let K be a set of chosen near-optimal kernels, initially empty.
+
+let A be a set of sets:
+    {
+		{(platform): performance, ...}, ...
+    }
+
+def weight(A[i]) = sum(performance[i])
+
+K = WeightedSetCover(A)
+
+K is now a set of kernels that achieves x% performance on all (d, i).
+
+
+Basically, for some K
+
+while not K achieves x% performance on all (d, i):
+                c <- the kernel that achieves x% performance for the largest number of (dev, inp) in uncovered_space    # greedily find kernel with most (device, input) coverage with performance of x%
+                remove (dev, inp) covered by c with x% performance from uncovered_space
+                K <- K U {c}
+         
+
+
+#### IGNORE BELOW
+
+
+WEIGHTED SET COVER:
+	INPUT:
+		A set U of n members,
+		A collection S1, S2, ... SM of subsets of U,
+		A weight function s -> R+,
+
+	OUTPUT:
+		K, a minimum weight subcollection of S whose union is U
+
+
+PORTABILITYCOV:
+	INPUT:
+		A, a set of n members,
+		C, a collection of subsets of A
+		A weight function s -> R+
+
+	OUTPUT:
+		K, a minimum weight subcollection of S whose union is U
+
+
+PORTABILITYCOVER:
+	Let A be a set of all B where:
+		B[k] = {(p, performance[k, platform]), ... for all platforms p } for all kernels k 
+	Let C be the powerset of A
+	Let weight be a function where weight(S) for some subcollection S = sum(max performances per platform in S)
+	K = WEIGHTED_SET_COVER(A, C, weight)
+	return K
+
+PORTABILITYCOVERMEAN:
+	Let A be a set of all B where:
+		B[k] = {(p, performance[k, platform]), ... for all platforms p } for all kernels k
+	Let C be the powerset of A
+	Let weight be a function where weight(S) for some subcollection S in A = mean(max performances per platform in S)
+	K = WEIGHTED_SET_COVER(A, C, weight)
+	return K
+
