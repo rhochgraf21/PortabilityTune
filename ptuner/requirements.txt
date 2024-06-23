@@ -1,0 +1,5 @@
+matplotlib==3.4.3
+opentuner==0.8.8
+pandas==1.5.3
+PyYAML==6.0.1
+scipy==1.11.2
